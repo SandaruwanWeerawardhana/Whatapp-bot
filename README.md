@@ -1,98 +1,119 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# WhatsApp Chat Bot with OpenAI Integration (NestJS)
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+A server-side chatbot application built with [NestJS](https://nestjs.com/) that integrates WhatsApp messaging and OpenAI (GPT) for intelligent conversational responses.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Features
 
-## Description
+- **WhatsApp Webhook Integration**: Receives and sends WhatsApp messages using the WhatsApp Cloud API.
+- **OpenAI GPT Integration**: Uses OpenAI's GPT models to generate intelligent responses to user messages.
+- **Modular NestJS Structure**: Clean, maintainable codebase using NestJS best practices.
+- **Environment-based Configuration**: Securely manages API keys and configuration via environment variables.
+- **Extensible Service Layer**: Easily add more AI providers or business logic.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Project Structure
 
-## Project setup
+```
+chat-bot/
+├── config/
+│   └── AppConfig.ts           # Loads environment variables and config
+├── src/
+│   ├── controller/
+│   │   └── whatapp.controller.ts  # WhatsApp webhook endpoints
+│   ├── openai/
+│   │   └── openai.service.ts      # OpenAI GPT integration
+│   ├── service/
+│   │   └── service.service.ts     # Business logic and WhatsApp API calls
+│   ├── app.module.ts
+│   └── main.ts
+├── .env                     # Environment variables (not committed)
+├── package.json
+└── README.md
+```
+
+## Setup Instructions
+
+### 1. Clone the Repository
+
+```bash
+$ git clone <your-repo-url>
+$ cd chat-bot
+```
+
+### 2. Install Dependencies
 
 ```bash
 $ npm install
 ```
 
-## Compile and run the project
+### 3. Configure Environment Variables
 
+Create a `.env` file in the root directory with the following variables:
+
+```
+WHATSAPP_API_VERSION=your_whatsapp_api_version
+WHATSAPP_PHONE_NUMBER_ID=your_phone_number_id
+WHATSAPP_API_KEY=your_whatsapp_api_key
+OPENAI_API_KEY=your_openai_api_key
+PORT=3000
+```
+
+- Get WhatsApp API credentials from [Meta for Developers](https://developers.facebook.com/docs/whatsapp/cloud-api/get-started).
+- Get your OpenAI API key from [OpenAI](https://platform.openai.com/account/api-keys).
+
+### 4. Run the Application
+
+#### Development
 ```bash
-# development
-$ npm run start
-
-# watch mode
 $ npm run start:dev
+```
 
-# production mode
+#### Production
+```bash
 $ npm run start:prod
 ```
 
-## Run tests
+The server will start on the port specified in your `.env` file (default: 3000).
 
-```bash
-# unit tests
-$ npm run test
+### 5. Expose Your Server (for Webhooks)
+If running locally, use [ngrok](https://ngrok.com/) or similar to expose your server to the internet for WhatsApp webhook verification.
 
-# e2e tests
-$ npm run test:e2e
+## API Endpoints
 
-# test coverage
-$ npm run test:cov
-```
+- `GET /whatapp/test` — Health check endpoint.
+- `GET /whatapp/webhook` — WhatsApp webhook verification.
+- `POST /whatapp/webhook` — Receives WhatsApp messages and responds using OpenAI.
+
+## How It Works
+
+1. WhatsApp sends a message to your webhook endpoint.
+2. The controller extracts the message and sender info.
+3. The service sends the message to OpenAI and gets a response.
+4. The service sends the AI-generated response back to the user via WhatsApp API.
+
+## Testing
+
+- **Unit tests:**
+  ```bash
+  $ npm run test
+  ```
+- **E2E tests:**
+  ```bash
+  $ npm run test:e2e
+  ```
+- **Test coverage:**
+  ```bash
+  $ npm run test:cov
+  ```
 
 ## Deployment
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
-```
-
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+See [NestJS deployment docs](https://docs.nestjs.com/deployment) for best practices. You can use [Mau](https://mau.nestjs.com) for cloud deployment.
 
 ## Resources
-
-Check out a few resources that may come in handy when working with NestJS:
-
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+- [NestJS Documentation](https://docs.nestjs.com)
+- [WhatsApp Cloud API Docs](https://developers.facebook.com/docs/whatsapp/cloud-api)
+- [OpenAI API Docs](https://platform.openai.com/docs/api-reference)
 
 ## License
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+MIT

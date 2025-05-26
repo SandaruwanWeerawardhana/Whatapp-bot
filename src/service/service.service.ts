@@ -1,10 +1,22 @@
 import { Injectable, Logger } from '@nestjs/common';
 import axios from 'axios';
 import { AppConfig } from '../../config/AppConfig';
+import { OpenaiService } from 'src/openai/openai.service';
 
 @Injectable()
 export class ServiceService {
-    private readonly logger = new Logger(ServiceService.name);
+  private readonly logger = new Logger(ServiceService.name);
+  constructor(private openaiService: OpenaiService) {}
+
+  async handleUserMessage(number: string, message: string) {
+    try {
+      const reply = await this.openaiService.generateOpenAIResponse(message);
+      this.sendMessage(number, reply);
+    } catch (e) {
+      this.logger.error('Error handling user message:', e);
+      this.sendMessage(number, 'Sorry, I could not process your request.');
+    }
+  }
 
   async sendMessage(to: string, message: string) {
     let data = JSON.stringify({
@@ -37,5 +49,9 @@ export class ServiceService {
       .catch((error) => {
         console.log(error);
       });
+  }
+
+  async generateOpenAIResponse(prompt: string): Promise<string> {
+    return this.openaiService.generateOpenAIResponse(prompt);
   }
 }

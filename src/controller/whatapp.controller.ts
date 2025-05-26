@@ -30,25 +30,23 @@ export class WhatappController {
   @Post('webhook')
   async handleWebhook(@Req() req, @Res() res) {
     const payload = req.body.entry;
-    try {
-      const change = payload[0].changes[0].value;
-      const senderNumber = change.contacts[0].wa_id;
-      const messageText = change.messages[0].text.body;
-      const senderName = change.contacts[0].profile.name;
-      
-      await this.whatsappService.sendMessage(senderNumber, 'Hello from OpenAI!');
-      console.log(`Sender Number: ${senderNumber}`);
-      console.log(`Message: ${messageText}`);
-      console.log(`Sender Name: ${senderName}`);
+        try {
+          const change = payload[0].changes[0].value;
+          const senderNumber = change.contacts[0].wa_id;
+          const messageText = change.messages[0].text.body;
+          const senderName = change.contacts[0].profile.name;
 
-      // Generate OpenAI response
-      //   await this.whatsappService.handleUserMessage(senderNumber, messageText);
+          this.logger.log(`Sender Number: ${senderNumber}`);
+          this.logger.log(`Message: ${messageText}`);
+          this.logger.log(`Sender Name: ${senderName}`);
 
-      res.sendStatus(200);
-    } catch (e) {
-      this.logger.error(e);
-      res.sendStatus(500);
-    }
+         
+          await this.whatsappService.handleUserMessage(senderNumber, messageText);
+
+          res.sendStatus(200);
+        } catch (e) {
+          this.logger.error(e);
+          res.sendStatus(500);
+        }
   }
-
 }
