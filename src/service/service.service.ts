@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import axios from 'axios';
-import { AppConfig } from '../../config/AppConfig';
+import { AppConfig } from '../config/AppConfig';
 import { OpenaiService } from 'src/openai/openai.service';
 
 @Injectable()
@@ -33,10 +33,10 @@ export class ServiceService {
     let config = {
       method: 'post',
       maxBodyLength: Infinity,
-      url: `https://graph.facebook.com/${AppConfig.WHATSAPP_API_VERSION}/${AppConfig.WHATSAPP_PHONE_NUMBER_ID}/messages`,
+      url: `https://graph.facebook.com/v22.0/${process.env.WHATSAPP_PHONE_NUMBER_ID}/messages`,
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${AppConfig.WHATSAPP_API_KEY}`,
+        Authorization: `Bearer ${process.env.WHATSAPP_API_KEY}`,
       },
       data: data,
     };

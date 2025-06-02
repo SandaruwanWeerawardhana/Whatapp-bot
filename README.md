@@ -1,14 +1,15 @@
 # WhatsApp Chat Bot with OpenAI Integration (NestJS)
 
-A server-side chatbot application built with [NestJS](https://nestjs.com/) that integrates WhatsApp messaging and OpenAI (GPT) for intelligent conversational responses.
+A powerful server-side chatbot built with [NestJS](https://nestjs.com/) that connects WhatsApp users to OpenAI's GPT models for intelligent, automated conversations.
 
 ## Features
 
-- **WhatsApp Webhook Integration**: Receives and sends WhatsApp messages using the WhatsApp Cloud API.
-- **OpenAI GPT Integration**: Uses OpenAI's GPT models to generate intelligent responses to user messages.
-- **Modular NestJS Structure**: Clean, maintainable codebase using NestJS best practices.
-- **Environment-based Configuration**: Securely manages API keys and configuration via environment variables.
-- **Extensible Service Layer**: Easily add more AI providers or business logic.
+- **WhatsApp Webhook Integration:** Receive and send WhatsApp messages using the WhatsApp Cloud API.
+- **OpenAI GPT Integration:** Generate smart, context-aware responses using OpenAI's GPT models.
+- **Modular NestJS Structure:** Clean, maintainable, and scalable codebase.
+- **Environment-based Configuration:** Securely manage API keys and configuration via environment variables.
+- **Extensible Service Layer:** Easily add more AI providers or business logic.
+- **Easy Testing & Deployment:** Built-in scripts for testing and deployment.
 
 ## Project Structure
 
@@ -30,7 +31,7 @@ chat-bot/
 └── README.md
 ```
 
-## Setup Instructions
+## Getting Started
 
 ### 1. Clone the Repository
 

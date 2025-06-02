@@ -1,7 +1,7 @@
 import { Controller, Get, Logger, Post, Req, Res } from '@nestjs/common';
 import { ServiceService } from '../service/service.service';
 
-@Controller('whatapp')
+@Controller('whatsapp')
 export class WhatappController {
   private readonly logger = new Logger(WhatappController.name);
   constructor(private whatsappService: ServiceService) {}
@@ -18,7 +18,7 @@ export class WhatappController {
     let challenge = req.query['hub.challenge'];
 
     if (mode && token) {
-      if (mode === 'subscribe' && token === process.env.WHATSAPP_VERIFY_TOKEN) {
+      if (mode === 'subscribe' && token === process.env.WHATSAPP_CHALLANGE_KEY) {
         console.log('WEBHOOK_VERIFIED');
         res.status(200).send(challenge);
       } else {
@@ -45,7 +45,6 @@ export class WhatappController {
 
           res.sendStatus(200);
         } catch (e) {
-          this.logger.error(e);
           res.sendStatus(500);
         }
   }
